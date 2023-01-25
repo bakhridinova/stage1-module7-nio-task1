@@ -1,31 +1,18 @@
 package com.epam.mjc.nio;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.util.List;
 
 
 public class FileReader {
 
     public Profile getDataFromFile(File file) {
-        Profile profile =  new Profile();
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file.getAbsoluteFile(), "r");
-             FileChannel fileChannel = randomAccessFile.getChannel()) {
-            ByteBuffer byteBuffer = ByteBuffer.allocate((int) randomAccessFile.length());
-            StringBuilder stringBuilder = new StringBuilder();
-            while (fileChannel.read(byteBuffer) > 0) {
-                byteBuffer.flip();
-                for (int i = 0; i < byteBuffer.limit(); i++) {
-                    stringBuilder.append((char) byteBuffer.get());
-                }
-                byteBuffer.clear();
-            }
-            System.out.println(stringBuilder);
-            List<String> list = List.of(stringBuilder.toString().split("\r\n"));
-            for (String s : list) {
+        Profile profile = new Profile();
+        try (BufferedReader inputStream = new BufferedReader(new java.io.FileReader(file))) {
+            String s;
+            while ((s = inputStream.readLine()) != null) {
+                System.out.println(s);
                 int delimiter = s.indexOf(":");
                 if (s.contains("Name")) {
                     profile.setName(s.substring(delimiter + 2));
