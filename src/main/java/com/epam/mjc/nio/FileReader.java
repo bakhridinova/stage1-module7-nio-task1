@@ -12,7 +12,6 @@ public class FileReader {
         try (BufferedReader inputStream = new BufferedReader(new java.io.FileReader(file))) {
             String s;
             while ((s = inputStream.readLine()) != null) {
-                System.out.println(s);
                 int delimiter = s.indexOf(":");
                 if (s.contains("Name")) {
                     profile.setName(s.substring(delimiter + 2));
